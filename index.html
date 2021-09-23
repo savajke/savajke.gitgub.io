@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Irregular words german</title>
+      <style>
+         .menu{
+         position: absolute;
+         top: 0;
+         right: 0;
+         margin-right: 80px;
+         margin-top: 20px;
+         font-size: 20px;
+         }
+         .button {
+         background-color: #555555;
+         border: none;
+         color: white;
+         padding: 15px 32px;
+         text-align: center;
+         text-decoration: none;
+         display: inline-block;
+         font-size: 16px;
+         margin: 4px 2px;
+         cursor: pointer;
+         transition-duration: 0.4s;
+         }
+         .button:hover {
+         background-color: #e7e7e7;
+         }
+         .tooltip {
+         position: relative;
+         display: inline-block;
+         }
+         .tooltip .tooltiptext {
+         visibility: hidden;
+         width: 140px;
+         background-color: #555555;
+         color: #fff;
+         text-align: center;
+         border-radius: 6px;
+         padding: 5px 0;
+         position: absolute;
+         z-index: 1;
+         bottom: 125%;
+         left: 50%;
+         margin-left: -60px;
+         opacity: 0;
+         transition: opacity 0.3s;
+         font-size: 18px;
+         }
+         .tooltip .tooltiptext::after {
+         content: "";
+         position: absolute;
+         top: 100%;
+         left: 50%;
+         margin-left: -5px;
+         border-width: 5px;
+         border-style: solid;
+         border-color: #555555 transparent transparent transparent;
+         }
+         .tooltip:hover .tooltiptext {
+         visibility: visible;
+         opacity: 1;
+         }
+         .correct {
+         background-color:MediumSeaGreen;
+         }
+         .incorrect {
+         background-color:tomato;
+         }
+         td {
+         font-size: 30px;
+         }
+         input {
+         font-size: 25px;
+         }
+         .workDiv {
+         position: absolute;
+         top: 30%;
+         left: 40%;
+         margin-left: -50px;
+         font-size: 30px;
+         width: 500px;
+         }​
+      </style>
+      <script>
+         let words = [
+         ['backen','backt','buk','hat gebacken','печь'],
+         ['befehlen','befiehlt','befahl','hat befohlen','приказывать'],
+         ['beginnen','beginnt','begann','hat begonnen','начинать'],
+         ['beißen','beißt','biß','hat gebissen','кусать'],
+         ['bergen','birgt','barg','hat geborgen','спасать'],
+         ['bersten','birst','barst','ist geborsten','лопнуть'],
+         ['biegen','biegt','bog','hat gebogen','гнуть'],
+         ['bieten','bietet','bot','hat geboten','предлагать'],
+         ['binden','bindet','band','hat gebunden','связывать'],
+         ['bitten','bittet','bat','hat gebeten','просить'],
+         ['blasen','bläst','blies','hat geblasen','дуть'],
+         ['bleiben','bleibt','blieb','ist geblieben','оставаться'],
+         ['braten','brät','briet','hat gebraten','жарить'],
+         ['brechen','bricht','brach','hat/ist gebrochen','ломать'],
+         ['brennen','brennt','brannte','hat gebrannt','гореть'],
+         ['bringen','bringt','brachte','hat gebracht','приносить'],
+         ['denken','denkt','dachte','hat gedacht','думать'],
+         ['dreschen','drischt','drosch','hat gedroschen','молотить'],
+         ['dringen','dringt','drang','hat/ist gedrungen','проникать'],
+         ['dürfen','darf','durfte','hat gedurft','мочь (иметь разрешение)'],
+         ['empfangen','empfängt','empfing','hat empfangen','принимать'],
+         ['empfehlen','empfiehlt','empfahl','hat empfohlen','рекомендовать'],
+         ['erlöschen','erlischt','erlosch','ist erloschen','потухать, прекращаться'],
+         ['erschrecken','erschrickt','erschrak','ist erschrocken','пугаться'],
+         ['essen','isst','aß','hat gegessen','есть, кушать'],
+         ['fahren','fährt','fuhr','hat/ist gefahren','ехать, ездить'],
+         ['fallen','fällt','fiel','ist gefallen','падать'],
+         ['fangen','fängt','fing','hat gefangen','ловить'],
+         ['fechten','ficht','focht','hat gefochten','фехтовать'],
+         ['finden','findet','fand','hat gefunden','находить'],
+         ['flechten','flicht','flocht','hat geflochten','плести'],
+         ['fliegen','fliegt','flog','hat/ist geflogen','летать'],
+         ['fliehen','flieht','floh','ist geflohen','убегать, удирать'],
+         ['fließen','fließt','floss','ist geflossen','течь, литься'],
+         ['fressen','frisst','fraß','hat gefressen','жрать, лопать'],
+         ['frieren','friert','fror','hat gefroren','замерзать'],
+         ['gären','gärt','gor','ist gegoren','бродить'],
+         ['gebären','gebärt','gebar','hat/ist geboren','родить'],
+         ['geben','gibt','gab','hat gegeben','давать'],
+         ['gedeihen','gedeiht','gedieh','ist gediehen','расти, преуспевать'],
+         ['gehen','geht','ging','ist gegangen','идти, ходить'],
+         ['gelingen','gelingt','gelang','ist gelungen','удаваться'],
+         ['gelten','gilt','galt','hat gegolten','стоить, цениться'],
+         ['genesen','genest','genas','ist genesen','выздоравливать'],
+         ['genießen','genießt','genoss','hat genossen','наслаждаться'],
+         ['geschehen','geschieht','geschah','ist geschehen','происходить'],
+         ['gewinnen','gewinnt','gewann','hat gewonnen','выигрывать'],
+         ['gießen','gießt','goss','hat gegossen','лить, наливать'],
+         ['gleichen','gleicht','glich','hat geglichen','выравнивать'],
+         ['gleiten','gleitet','glitt','ist geglitten','скользить'],
+         ['graben','gräbt','grub','hat gegraben','копать'],
+         ['greifen','greift','griff','hat gegriffen','браться (за что-л.)'],
+         ['haben','hat','hatte','hat gehabt','иметь'],
+         ['halten','hält','hielt','hat gehalten','держать'],
+         ['hängen','hängt','hing','hat gehangen','висеть'],
+         ['hauen','haut','haute','hat/ist gehauen','рубить'],
+         ['heben','hebt','hob','hat gehoben','поднимать'],
+         ['heißen','heißt','hieß','hat geheißen','называться'],
+         ['helfen','hilft','half','hat geholfen','помогать'],
+         ['kennen','kennt','kannte','hat gekannt','знать'],
+         ['klingen','klingt','klang','hat geklungen','звенеть'],
+         ['kneifen','kneift','kniff','hat gekniffen','щипать'],
+         ['kommen','kommt','kam','ist gekommen','приходить'],
+         ['können','kann','konnte','hat gekonnt','мочь'],
+         ['kriechen','kriecht','kroch','ist gekrochen','ползать'],
+         ['laden','lädt','lud','hat geladen','грузить, приглашать'],
+         ['lassen','lässt','ließ','hat gelassen','позволять, велеть'],
+         ['laufen','läuft','lief','ist gelaufen','бегать'],
+         ['leiden','leidet','litt','hat gelitten','страдать, терпеть'],
+         ['leihen','leiht','lieh','hat geliehen','одалживать'],
+         ['lesen','liest','las','hat gelesen','читать'],
+         ['liegen','liegt','lag','hat gelegen','лежать'],
+         ['löschen','löscht','losch','hat geloschen','тушить, стирать'],
+         ['lügen','lügt','log','hat gelogen','лгать'],
+         ['mahlen','mahlt','mahlte','hat gemahlen','молоть'],
+         ['meiden','meidet','mied','hat gemieden','избегать'],
+         ['melken','melkt','melkte','hat gemolken/gemelkt','доить'],
+         ['messen','misst','maß','hat gemessen','измерять'],
+         ['mißlingen','mißlingt','mißlang','ist mißlungen','не удаваться'],
+         ['mögen','mag','mochte','hat gemocht','любить, хотеть'],
+         ['müssen','muss','musste','hat gemusst','долженствовать'],
+         ['nehmen','nimmt','nahm','hat genommen','брать'],
+         ['nennen','nennt','nannte','hat genannt','называть'],
+         ['pfeifen','pfeift','pfiff','hat gepfiffen','свистеть'],
+         ['preisen','preist','pries','hat gepriesen','хвалить'],
+         ['quellen','quillt','quoll','ist gequollen','бить ключом'],
+         ['raten','rät','riet','hat geraten','советовать'],
+         ['reiben','reibt','rieb','hat gerieben','тереть'],
+         ['reißen','reißt','riss','hat/ist gerissen','рвать'],
+         ['reiten','reitet','ritt','hat/ist geritten','ездить верхом'],
+         ['rennen','rennt','rannte','ist gerannt','бежать'],
+         ['riechen','riecht','roch','hat gerochen','нюхать'],
+         ['ringen','ringt','rang','hat gerungen','бороться, добиваться'],
+         ['rinnen','rinnt','rann','ist geronnen','течь'],
+         ['rufen','ruft','rief','hat gerufen','кричать, звать'],
+         ['salzen','salzt','salzte','hat gesalzt','солить'],
+         ['saufen','säuft','soff','hat gesoffen','пить, пьянствовать'],
+         ['saugen','saugt','saugte','hat gesaugt','сосать'],
+         ['schaffen','schafft','schuf','hat geschaffen','создавать, творить'],
+         ['scheiden','scheidet','schied','hat/ist geschieden','разделять'],
+         ['scheinen','scheint','schien','hat geschienen','светить, сиять'],
+         ['schelten','schilt','schalt','hat gescholten','бранить'],
+         ['scheren','schiert','schor','hat geschoren','стричь'],
+         ['schieben','schiebt','schob','hat geschoben','двигать, толкать'],
+         ['schießen','schießt','schoss','hat geschossen','стрелять'],
+         ['schlafen','schläft','schlief','hat geschlafen','спать'],
+         ['schlagen','schlägt','schlug','hat geschlagen','бить'],
+         ['schleichen','schleicht','schlich','ist geschlichen','красться'],
+         ['schleifen','schleift','schliff','hat geschliffen','точить'],
+         ['schließen','schließt','schloss','hat geschlossen','закрывать'],
+         ['schlingen','schlingt','schlang','hat geschlungen','обвивать'],
+         ['schmeißen','schmeißt','schmiss','hat geschmissen','кидать, бросать'],
+         ['schmelzen','schmilzt','schmolz','hat/ist geschmolzen','таять'],
+         ['schneiden','schneidet','schnitt','hat geschnitten','резать'],
+         ['schreiben','schreibt','schrieb','hat geschrieben','писать'],
+         ['schreien','schreit','schrie','hat geschrien','кричать'],
+         ['schreiten','schreitet','schritt','ist geschritten','шагать'],
+         ['schweigen','schweigt','schwieg','hat geschwiegen','молчать'],
+         ['schwellen','schwillt','schwoll','ist geschwollen','пухнуть'],
+         ['schwimmen','schwimmt','schwamm','ist geschwommen','плавать'],
+         ['schwinden','schwindet','schwand','ist geschwunden','убывать, исчезать'],
+         ['schwingen','schwingt','schwang','hat geschwungen','махать, размахивать'],
+         ['schwören','schwört','schwor','hat geschworen','клясться'],
+         ['sehen','sieht','sah','hat gesehen','смотреть'],
+         ['sein','ist','war','ist gewesen','быть'],
+         ['senden','sendet','sandte','hat gesandt','посылать, отправлять'],
+         ['singen','singt','sang','hat gesungen','петь'],
+         ['sinken','sinkt','sank','ist gesunken','опускаться, погружаться'],
+         ['sinnen','sinnt','sann','hat gesonnen','думать, размышлять'],
+         ['sitzen','sitzt','saß','hat gesessen','сидеть'],
+         ['sollen','soll','sollte','hat gesollt','долженствовать'],
+         ['speien','speit','spie','hat gespien','выплёвывать'],
+         ['spinnen','spinnt','spann','hat gesponnen','прясть'],
+         ['sprechen','spricht','sprach','hat gesprochen','говорить'],
+         ['sprießen','sprießt','spross','ist gesprossen','пускать ростки, почки'],
+         ['springen','springt','sprang','ist gesprungen','прыгать, скакать'],
+         ['stechen','sticht','stach','ist gestochen','колоть'],
+         ['stehen','steht','stand','hat gestanden','стоять, находиться'],
+         ['stehlen','stiehlt','stahl','hat gestohlen','воровать'],
+         ['steigen','steigt','stieg','ist gestiegen','подниматься'],
+         ['sterben','stirbt','starb','ist gestorben','умирать'],
+         ['stinken','stinkt','stank','hat gestunken','вонять'],
+         ['stoßen','stößt','stieß','hat/ist gestoßen','толкать'],
+         ['streichen','streicht','strich','hat gestrichen','гладить'],
+         ['streiten','streitet','stritt','hat gestritten','спорить'],
+         ['tragen','trägt','trug','hat getragen','носить'],
+         ['treffen','trifft','traf','hat getroffen','встречать'],
+         ['treiben','treibt','trieb','hat/ist getrieben','гнать'],
+         ['treten','tritt','trat','hat/ist getreten','ступать'],
+         ['trinken','trinkt','trank','hat getrunken','пить'],
+         ['trügen','trügt','trog','hat getrogen','обманывать'],
+         ['tun','tut','tat','hat getan','делать'],
+         ['verderben','verdirbt','verdarb','hat/ist verdorben','портить'],
+         ['verdrießen','verdrießt','verdross','hat verdrossen','сердить, досаждать'],
+         ['vergessen','vergisst','vergaß','hat vergessen','забывать'],
+         ['verlieren','verliert','verlor','hat verloren','терять'],
+         ['verzeihen','verzeiht','verzieh','hat verziehen','прощать'],
+         ['wachsen','wächst','wuchs','ist gewachsen','расти'],
+         ['wägen','wägt','wog','hat gewogen','взвешивать'],
+         ['waschen','wäscht','wusch','hat gewaschen','мыть'],
+         ['weichen','weicht','wich','ist gewichen','уклоняться, уворачиваться'],
+         ['weisen','weist','wies','hat gewiesen','указывать'],
+         ['wenden','wendet','wendete','hat gewendet','поворачивать'],
+         ['werben','wirbt','warb','hat geworben','рекламировать'],
+         ['werden','wird','wurde','ist geworden','становиться'],
+         ['werfen','wirft','warf','hat geworfen','кидать'],
+         ['wiegen','wiegt','wog','hat gewogen','качать, весить'],
+         ['winden','windet','wand','hat gewunden','мотать'],
+         ['wissen','weiß','wusste','hat gewusst','знать'],
+         ['wollen','will','wollte','hat gewollt','хотеть'],
+         ['ziehen','zieht','zog','hat/ist gezogen','тащить'],
+         ['zwingen','zwingt','zwang','hat gezwungen','принуждать']
+         ];
+         
+         let index = 0;
+         let useRandomOrder = false;
+         let size = words.length;
+         
+         function buttonCall() {
+         	if (index >= size) {
+         		index = 0;
+         	}
+         	let comp = words[index];
+         	document.getElementById("wordId").innerHTML = comp[0];
+         	document.getElementById("wordTranslation").innerHTML = comp[4];
+         	var praesens = document.getElementById("praesens");
+         	document.getElementById("praesensTooltip").innerHTML = comp[1];
+		praesens.value = '';
+         	praesens.classList.remove("correct");
+         	praesens.classList.remove("incorrect");
+         	var praeteritum = document.getElementById("praeteritum");
+         	document.getElementById("praeteritumTooltip").innerHTML = comp[2];
+                praeteritum.value = '';
+         	praeteritum.classList.remove("correct");
+         	praeteritum.classList.remove("incorrect");
+         	var partizip2 = document.getElementById("partizip2");
+         	document.getElementById("partizip2Tooltip").innerHTML = comp[3];
+		partizip2.value = '';
+         	partizip2.classList.remove("correct");
+         	partizip2.classList.remove("incorrect");
+         if (useRandomOrder) {
+         index = Math.floor(Math.random() * size );
+         } else {
+         index++;
+         }
+         }
+         function validate(key) {
+         	let wordSet = words[index-1];
+         	switch (key) {
+         		case 'praesens':
+         		checkResult( document.getElementById("praesens"), wordSet[1]);
+         		break;
+         		case 'praeteritum':
+         		checkResult( document.getElementById("praeteritum"), wordSet[2]);
+         		break;
+         		case 'partizip2':
+         		checkResult( document.getElementById("partizip2"), wordSet[3]);
+         		break;
+         	}
+         }
+         function checkResult(element, value) {
+         	if (element.value === value) {
+         		element.classList.add("correct");
+         		element.classList.remove("incorrect");
+         	} else {
+         		element.classList.remove("correct");
+         		element.classList.add("incorrect");
+         	}
+         }
+         function clickHideTranslation() {
+         	if (document.getElementById('hideTranslation').checked) 
+         {
+         document.getElementById('wordTranslation').style.display = 'none'
+         } else {
+         document.getElementById('wordTranslation').style.display = 'block'
+         }
+         }
+         
+         function clickHideWord() {
+         	if (document.getElementById('hideWord').checked) 
+         {
+         document.getElementById('wordId').style.display = 'none'
+         } else {
+         document.getElementById('wordId').style.display = 'block'
+         }
+         }
+         
+         
+         function clickUseRandomOrder() {
+         	if (document.getElementById('useRandomOrder').checked) 
+         {
+         useRandomOrder = true;
+         } else {
+         useRandomOrder = false;
+         }
+         }
+      </script>
+   </head>
+   <body>
+      <div class="menu">
+         <div>
+            <input type="checkbox" id="hideTranslation" name="hideTranslation" value="" onclick="clickHideTranslation();">
+            <label for="hideTranslation">Hide translation</label>
+         </div>
+         <div>
+            <input type="checkbox" id="hideWord" name="hideWord" value="" onclick="clickHideWord();">
+            <label for="hideWord">Hide word</label>
+         </div>
+         <div>
+            <input type="checkbox" id="useRandomOrder" name="useRandomOrder" value="" onclick="clickUseRandomOrder();">
+            <label for="useRandomOrder">Use random order</label>
+         </div>
+      </div>
+      <div class="workDiv">
+         <div id="wordId" style="font-weight: bold;margin-left: 145px;">Word</div>
+         <div id="wordTranslation" style="font-style: italic;margin-top: 10px;margin-bottom: 20px;margin-left: 145px;">Translation</div>
+         <div id="wordTable">
+            <table>
+               <tr>
+                  <td>
+                     <div class="tooltip">Praesens <span class="tooltiptext" id="praesensTooltip"></span></div>
+                  </td>
+                  <td><input id="praesens" type="text" value="" onkeyup="validate('praesens')" onblur="validate('praesens')"/></td>
+               </tr>
+               <tr>
+                  <td>
+                     <div class="tooltip">Praeteritum <span class="tooltiptext" id="praeteritumTooltip"></span></div>
+                  </td>
+                  <td><input id="praeteritum" type="text" value="" onkeyup="validate('praeteritum')" onblur="validate('praeteritum')"/></td>
+               </tr>
+               <tr>
+                  <td>
+                     <div class="tooltip">Partizip2 <span class="tooltiptext" id="partizip2Tooltip"></span></div>
+                  </td>
+                  <td><input id="partizip2" type="text" value="" onkeyup="validate('partizip2')" onblur="validate('partizip2')"/></td>
+               </tr>
+            </table>
+         </div>
+         <div id="buttons">
+            <div style="width: 80px;display: block;margin: 0 auto;"><button class="button" onclick="buttonCall()">Weiter</button></div>
+         </div>
+      </div>
+   </body>
+</html>
