@@ -1,1 +1,1 @@
-# savajke.gitgub.io
+Small project for lerning German irregular words
