@@ -306,7 +306,7 @@
          	}
          }
          function checkResult(element, value) {
-         	if (element.value === value) {
+         	if (element.value.toUpperCase() === value.toUpperCase()) {
          		element.classList.add("correct");
          		element.classList.remove("incorrect");
          	} else {
